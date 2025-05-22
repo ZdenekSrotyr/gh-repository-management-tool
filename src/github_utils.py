@@ -75,7 +75,7 @@ class PlaceholderExtractionResult:
     error: Optional[str] = None
 # --- End of New Dataclasses ---
 
-def create_oauth_component(client_id: str = None, client_secret: str = None) -> Optional[Any]:
+def create_oauth_component(client_id: str, client_secret: str) -> Optional[Any]:
     """
     Creates and returns an OAuth2Component instance.
     Returns None if client_id or client_secret is missing.
