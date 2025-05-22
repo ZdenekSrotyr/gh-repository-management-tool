@@ -1,4 +1,4 @@
-# Specification and Development Plan for a Bulk GitHub Repository Management Tool
+# Bulk GitHub Repository Management Tool
 
 ## 1. Application Goal
 
