@@ -1,11 +1,8 @@
 import streamlit as st
 import sys
 import os
-from dotenv import load_dotenv
 from src import github_utils # Import the module
 from github import Github # Import Github class for type hinting and instantiation
-import github # <--- ADDED IMPORT
-import re # Import re for regex operations in update_file logic
 import logging # Import the logging module
 import datetime # Import datetime to define timestamp
 from src import action_processing # <-- NEW IMPORT FOR THE ENTIRE MODULE
@@ -39,8 +36,6 @@ if 'logger' not in st.session_state:
 def trigger_rerun():
     st.rerun()
 
-load_dotenv() # Load .env file variables at the start of the application
-
 # Define constants for GitHub OAuth that are used in app.py for the authorize_button
 # These were previously partly in github_utils or implicit.
 APP_REDIRECT_URI = "http://localhost:8501" # Base URI of the Streamlit app
@@ -50,10 +45,6 @@ MAX_ACTION_LOG_DISPLAY_HEIGHT = 300 # px, for st.text_area in results
 st.set_page_config(layout="wide") # Use wide layout
 
 st.title("GitHub Bulk Repository Operations Tool")
-
-# Load Client ID and Client Secret from environment variables
-CLIENT_ID = os.getenv("GITHUB_CLIENT_ID")
-CLIENT_SECRET = os.getenv("GITHUB_CLIENT_SECRET")
 
 # Initialize session state for token if not already present
 if 'token' not in st.session_state:
@@ -95,13 +86,8 @@ if 'placeholder_form_values_loaded_for_edit' not in st.session_state:
 if 'form_placeholder_test_result_content' not in st.session_state:
     st.session_state.form_placeholder_test_result_content = None # Stores (status, message, default_used_flag)
 
-# Check if credentials were loaded
-if not CLIENT_ID or not CLIENT_SECRET:
-    st.error("GITHUB_CLIENT_ID or GITHUB_CLIENT_SECRET missing. Ensure they are set in the .env file and the .env file is in the root directory.")
-    st.stop() 
-
 # Create OAuth component
-oauth_component = github_utils.create_oauth_component(CLIENT_ID, CLIENT_SECRET)
+oauth_component = github_utils.create_oauth_component()
 
 # --- Login/Logout Logic directly in app.py ---
 if not st.session_state.get('token'):
